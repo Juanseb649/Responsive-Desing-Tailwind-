@@ -1,11 +1,11 @@
-export const ROWS = 10;
-export const COLS = ['A', 'B', 'C', 'D'];
+export const ROWS = 4;
+export const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 export const MAX_SEATS = 4;
 
 export const SECTIONS = [
   { id: 1, label: 'Sección 1', rows: [1, 2, 3, 4] },
-  { id: 2, label: 'Sección 2', rows: [5, 6, 7] },
-  { id: 3, label: 'Sección 3', rows: [8, 9, 10] },
+  { id: 2, label: 'Sección 2', rows: [1, 2, 3, 4] },
+  { id: 3, label: 'Sección 3', rows: [1, 2, 3, 4] },
 ];
 
 export const PRICES = { A: 85, B: 65, C: 65, D: 85 };
@@ -34,6 +34,10 @@ export class SeatModel {
       const col = COLS[Math.floor(Math.random() * COLS.length)];
       this.occupiedSeats.add(this.seatId(row, col));
     }
+  }
+
+  getSeatColumns() {
+    return COLS;
   }
 
   getActiveSection() {

@@ -24,6 +24,7 @@ export class SeatController {
     });
 
     window.__toggleSeat = (row, col) => this.toggleSeat(row, col);
+    window.__selectAircraftSection = (sectionId) => this.switchToSection(Number(sectionId));
     this.render();
   }
 

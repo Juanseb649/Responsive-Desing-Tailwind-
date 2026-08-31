@@ -133,14 +133,17 @@ export class SeatView {
 
     container.innerHTML = '';
 
+    const columns = model.getSeatColumns();
     const colHeaders = document.createElement('div');
-    colHeaders.className = 'grid grid-cols-[2rem_repeat(10,1fr)] items-center gap-2 sm:gap-3 text-center text-xs text-gray-400 font-mono mb-2';
+    colHeaders.className = 'grid items-center gap-2 sm:gap-3 text-center text-xs text-gray-400 font-mono mb-2';
+    colHeaders.style.gridTemplateColumns = `2rem repeat(${columns.length}, minmax(0, 1fr))`;
     colHeaders.innerHTML = `<span></span>${summary.section.rows.map((row) => `<span>${row}</span>`).join('')}`;
     container.appendChild(colHeaders);
 
-    ['A', 'B', 'C', 'D'].forEach((col, colIndex) => {
+    columns.forEach((col, colIndex) => {
       const rowEl = document.createElement('div');
-      rowEl.className = 'grid grid-cols-[2rem_repeat(10,1fr)] items-center gap-2 sm:gap-3 card-row';
+      rowEl.className = 'grid items-center gap-2 sm:gap-3 card-row';
+      rowEl.style.gridTemplateColumns = `2rem repeat(${columns.length}, minmax(0, 1fr))`;
       rowEl.style.animationDelay = `${colIndex * 60}ms`;
 
       let cellsHTML = `<span class="text-xs font-mono text-gray-400 text-center">${col}</span>`;
@@ -163,7 +166,7 @@ export class SeatView {
       rowEl.innerHTML = cellsHTML;
       container.appendChild(rowEl);
 
-      if (colIndex === 1) {
+      if (colIndex === Math.floor(columns.length / 2) - 1) {
         const aisle = document.createElement('div');
         aisle.className = 'h-3 sm:h-4';
         container.appendChild(aisle);
