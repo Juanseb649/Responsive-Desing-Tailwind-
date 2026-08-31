@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #F2F4F7;
+  --color-surface-card: #F8F9FB;
+  --color-dark: #121316;
+  --color-violet: #5846F6;
+  --color-violet-hover: #4a3ad4;
+  --color-lime: #D2F843;
+  --color-lime-hover: #c2ed29;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-border: #E5E7EB;
+  --color-border-light: #F3F4F6;
+  --color-seat-available: #E5E7EB;
+  --color-seat-occupied: #9CA3AF;
+  --color-seat-blocked: #D1D5DB;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #F2F4F7;
+  min-height: 100vh;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 999px; }
+
+@keyframes seatSelect {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.85); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes seatDeselect {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInBottom {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes chipIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(88, 70, 246, 0.3); }
+  100% { box-shadow: 0 0 0 8px rgba(88, 70, 246, 0); }
+}
+
+@keyframes viewportGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(17, 19, 22, 0.05); }
+  50% { box-shadow: 0 0 12px 2px rgba(17, 19, 22, 0.08); }
+}
+
+.seat-btn {
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.seat-btn:active:not(:disabled) {
+  transform: scale(0.88);
+}
+
+.seat-btn.just-selected {
+  animation: seatSelect 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.seat-btn.just-deselected {
+  animation: seatDeselect 0.25s ease-out;
+}
+
+.card-row {
+  animation: fadeInUp 0.4s ease-out both;
+}
+
+.dock-enter {
+  animation: slideInBottom 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.chip-in {
+  animation: chipIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.minimap-viewport {
+  animation: viewportGlow 3s ease-in-out infinite;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pulse-selected {
+  animation: pulse-ring 1s ease-out;
+}
