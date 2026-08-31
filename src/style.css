@@ -75,9 +75,15 @@ body {
 }
 
 .seat-btn {
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(17, 19, 22, 0.04);
+  box-shadow: inset 0 -2px 0 rgba(17, 19, 22, 0.02);
+}
+
+.seat-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
 }
 
 .seat-btn:active:not(:disabled) {
@@ -96,6 +102,27 @@ body {
   animation: fadeInUp 0.4s ease-out both;
 }
 
+#seat-matrix {
+  width: min(100%, 580px);
+  margin: 0 auto;
+}
+
+#seat-matrix .grid {
+  gap: 0.55rem;
+}
+
+#seat-matrix .seat-btn {
+  min-height: 2.4rem;
+  border-radius: 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#seat-matrix .seat-btn[disabled] {
+  opacity: 1;
+}
+
 .dock-enter {
   animation: slideInBottom 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -105,10 +132,356 @@ body {
 }
 
 .minimap-viewport {
-  animation: viewportGlow 3s ease-in-out infinite;
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  display: none;
 }
 
 .pulse-selected {
   animation: pulse-ring 1s ease-out;
+}
+
+/* ============================================================
+   SECTION NAVIGATOR — MOVIL-PRIMERO (base: 320px–480px)
+   En mobile el avión se desplaza en el EJE Y (vertical),
+   dentro de un menú colapsado y compacto.
+   ============================================================ */
+
+.section-nav {
+  position: relative;
+  display: block;
+  background: #F8F9FB;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  padding: 0.75rem;
+}
+
+.section-nav__track {
+  position: relative;
+  display: flex;
+  flex-direction: column;      /* EJE Y en mobile */
+  gap: 0.25rem;
+}
+
+.section-nav__plane {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: top 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* En mobile el avión viaja vertical → rota 90° para apuntar hacia abajo
+   (el fuselaje se alinea con el eje Y del track) */
+.section-nav__plane svg {
+  width: 32px;
+  height: 32px;
+  transform: rotate(90deg);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-nav__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 44px;           /* Touch target recomendado */
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.825rem;
+  color: #4B5563;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.section-nav__item:hover {
+  background: rgba(17, 19, 22, 0.04);
+}
+
+.section-nav__item.is-active {
+  color: #111827;
+  font-weight: 700;
+}
+
+.section-nav__marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  background: #F0F2F5;
+  color: #6B7280;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.section-nav__item.is-active .section-nav__marker {
+  background: #121316;
+  color: #fff;
+}
+
+.section-nav__label {
+  margin-left: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.section-nav__meta {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: #9CA3AF;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ============================================================
+   TABLET (≥768px) — lienzo intermedio, se mantiene vertical
+   ============================================================ */
+@media (min-width: 768px) {
+  .section-nav {
+    border-radius: 1.25rem;
+    padding: 1rem;
+  }
+
+  .section-nav__item {
+    min-height: 48px;
+  }
+}
+
+/* ============================================================
+   DESKTOP (≥1024px) — avión viaja por el EJE X (horizontal)
+   ============================================================ */
+@media (min-width: 1024px) {
+  .section-nav__track {
+    flex-direction: row;       /* EJE X en desktop */
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .section-nav__plane {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: left 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 2;
+  }
+
+  /* Desktop: el avión viaja horizontal → apunta hacia la derecha */
+  .section-nav__plane svg {
+    width: 40px;
+    height: 40px;
+    transform: rotate(0deg);
+  }
+
+  .section-nav__item {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    min-height: 56px;
+    padding: 0.5rem;
+  }
+
+  .section-nav__item:hover {
+    background: transparent;
+  }
+
+  .section-nav__marker {
+    order: 2;
+  }
+
+  .section-nav__label {
+    order: 1;
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+
+  .section-nav__meta {
+    display: none;
+    order: 3;
+  }
+}
+
+/* ============================================================
+   INTERACTIVE AIRCRAFT VIEWPORT SELECTOR — MOVIL-PRIMERO
+   base (320–480px): minimap vertical + tabs apiladas
+   ============================================================ */
+
+.viewport-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.viewport-stage {
+  position: relative;
+  background: linear-gradient(180deg, #F5F5F2 0%, #F1F2F1 100%);
+  border: 1px solid #E5E7EB;
+  border-radius: 1.4rem;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  outline: none;
+  cursor: grab;
+}
+
+.viewport-stage:active {
+  cursor: grabbing;
+}
+
+.viewport-stage:focus-visible {
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.4);
+}
+
+.viewport-stage__svg {
+  width: 100%;
+  display: block;
+  padding: 0.7rem 0.6rem 0.3rem;
+}
+
+.viewport-stage__svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.active-lens {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 22%;
+  height: 72%;
+  z-index: 10;
+  border-radius: 1.05rem;
+  border: 2px solid #191b1d;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 6px 16px rgba(17, 19, 22, 0.08);
+  transform: translate3d(0, -50%, 0);
+  will-change: transform;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.active-lens__label {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #121316;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(17, 19, 22, 0.2);
+}
+
+.viewport-tabs {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.viewport-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 2.7rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #E5E7EB;
+  background: #F0F2F5;
+  border-radius: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #111827;
+}
+
+.viewport-tab:hover {
+  background: #E8EAF0;
+}
+
+.viewport-tab.is-active {
+  background: #121316;
+  border-color: #121316;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.viewport-tab__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 0.55rem;
+  background: #F5F6F8;
+  color: #5F6672;
+  font-size: 0.7rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+}
+
+.viewport-tab.is-active .viewport-tab__num {
+  background: #1d1f22;
+  color: #fff;
+}
+
+.viewport-tab__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.viewport-tab.is-active .viewport-tab__label {
+  color: #fff;
+}
+
+.viewport-tab__meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  color: #9CA3AF;
+}
+
+.viewport-tab.is-active .viewport-tab__meta {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (min-width: 768px) {
+  .viewport-tabs {
+    gap: 0.6rem;
+  }
+
+  .viewport-tab {
+    min-height: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .viewport-stage {
+    border-radius: 1.25rem;
+  }
+
+  .viewport-stage__svg {
+    padding-top: 1.1rem;
+  }
+
+  .viewport-tab__meta {
+    display: none;
+  }
 }
